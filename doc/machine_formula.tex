@@ -1,0 +1,19 @@
+\documentclass[preview]{standalone}
+
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\begin{document}
+\begin{align}
+M &= ( Z, \Sigma, \Gamma, \delta, z_{0}, g_{leer}, E )\\
+Z &= \{ 00, 01, 02, \dots ff \}\\
+\Sigma &= \{ 01, 02, 03, \dots fe, ff \}\\
+\Gamma &= \{ 00, 01, 02, \dots fe, ff \}\\
+\delta &= Z\times\Gamma\rightarrow\mathcal{P}(Z\times\Gamma\times\{L,R,N\})\\
+z_{0} &= 00\\
+g_{leer} &= 00\\
+E &= \{ ff \}
+\end{align}
+\end{document}
