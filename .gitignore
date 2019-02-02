@@ -1,0 +1,15 @@
+# C++ compile time files
+**.d
+**.o
+
+# Executable
+**/code
+
+# Latex compile files
+**.aux
+**.dvi
+**.fdb_latexmk
+**.fls
+**.log
+**.pdf
+**.synctex.gz
