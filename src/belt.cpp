@@ -1,11 +1,13 @@
 #include "belt.h"
 
-Belt::Belt(const std::size_t size) : raw_data(new unsigned char[size]), data_size(size)
+Belt::~Belt() { }
+
+ArrayBelt::ArrayBelt(const std::size_t size) : raw_data(new unsigned char[size]), data_size(size)
 {
 	position = raw_data;
 }
 
-Belt::Belt(Belt& cpy) : raw_data(new unsigned char[cpy.data_size]), data_size(cpy.data_size)
+ArrayBelt::ArrayBelt(ArrayBelt& cpy) : raw_data(new unsigned char[cpy.data_size]), data_size(cpy.data_size)
 {
 	position = raw_data + (cpy.position - cpy.raw_data);
 
@@ -15,7 +17,7 @@ Belt::Belt(Belt& cpy) : raw_data(new unsigned char[cpy.data_size]), data_size(cp
 	}
 }
 
-Belt::Belt(Belt&& cpym) : position(cpym.position), raw_data(cpym.raw_data),
+ArrayBelt::ArrayBelt(ArrayBelt&& cpym) : position(cpym.position), raw_data(cpym.raw_data),
 		data_size(cpym.data_size)
 {
 	cpym.position = nullptr;
@@ -24,12 +26,12 @@ Belt::Belt(Belt&& cpym) : position(cpym.position), raw_data(cpym.raw_data),
 
 }
 
-Belt::~Belt()
+ArrayBelt::~ArrayBelt()
 {
 	delete [] raw_data;
 }
 
-Belt& Belt::operator=(const Belt& cpy)
+ArrayBelt& ArrayBelt::operator=(const ArrayBelt& cpy)
 {
 	data_size = cpy.data_size;
 	raw_data = new unsigned char[cpy.data_size];
@@ -43,7 +45,7 @@ Belt& Belt::operator=(const Belt& cpy)
 	return *this;
 }
 
-Belt& Belt::operator=(Belt&& cpym)
+ArrayBelt& ArrayBelt::operator=(ArrayBelt&& cpym)
 {
 	position = cpym.position;
 	cpym.position = nullptr;
@@ -58,17 +60,17 @@ Belt& Belt::operator=(Belt&& cpym)
 	return *this;
 }
 
-Belt::data_t Belt::get()
+ArrayBelt::data_t ArrayBelt::get()
 {
 	return *position;
 }
 
-void Belt::set(const data_t data)
+void ArrayBelt::set(const data_t data)
 {
 	*position = data;
 }
 
-void Belt::m_left()
+void ArrayBelt::m_left()
 {
 	if (position == raw_data)
 	{
@@ -78,7 +80,7 @@ void Belt::m_left()
 	position -= 1;
 }
 
-void Belt::m_right()
+void ArrayBelt::m_right()
 {
 	if (position == raw_data + (data_size - 1))
 	{
@@ -88,7 +90,7 @@ void Belt::m_right()
 	position += 1;
 }
 
-void Belt::input(const data_t* data, std::size_t size)
+void ArrayBelt::input(const data_t* data, std::size_t size)
 {
 	if (size > data_size)
 	{
@@ -101,7 +103,7 @@ void Belt::input(const data_t* data, std::size_t size)
 	}
 }
 
-void Belt::dump()
+void ArrayBelt::dump()
 {
 	std::cout << "Size: 0x" << std::hex << data_size << std::endl;
 	std::cout << "Position: 0x" << std::hex << position - raw_data << std::endl;

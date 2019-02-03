@@ -26,15 +26,16 @@ int main() {
 		0x02, 0x02, 0x02, 0x02,
 	};
 
-	TMachine machine(1 << 8, actions);
-	machine.get_belt().input(data, sizeof(data));
+	ArrayBelt belt(1 << 8);
+	TMachine machine(actions, &belt);
+	machine.get_belt()->input(data, sizeof(data));
 
 	while (machine.get_state() != 0xff)
 	{
 		machine.step();
 	}
 
-	machine.get_belt().dump();
+	machine.get_belt()->dump();
 
 	return 0;
 }

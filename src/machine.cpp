@@ -1,9 +1,9 @@
 #include "machine.h"
 
-TMachine::TMachine(const std::size_t belt_size, const TMachine::action_set_t actions) :
-		state(0), belt(belt_size), actions(actions) { }
+TMachine::TMachine(const TMachine::action_set_t actions, Belt* belt) :
+		state(0), belt(belt), actions(actions) { }
 
-Belt& TMachine::get_belt()
+Belt* TMachine::get_belt()
 {
 	return belt;
 }
@@ -15,24 +15,24 @@ TMachine::state_t TMachine::get_state()
 
 void TMachine::step()
 {
-	const Belt::data_t data = belt.get();
+	const Belt::data_t data = belt->get();
 	const Machine_Action current = actions[state][data];
 
 	state = current.next_state;
 
 	if (current.data_out != data)
 	{
-		belt.set(current.data_out);
+		belt->set(current.data_out);
 	}
 
 	switch (current.action)
 	{
 		case Belt_Action::LEFT:
-			belt.m_left();
+			belt->m_left();
 			break;
 
 		case Belt_Action::RIGHT:
-			belt.m_right();
+			belt->m_right();
 			break;
 
 		default:

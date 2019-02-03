@@ -11,14 +11,33 @@ class Belt
 	public:
 		typedef unsigned char data_t;
 
-		Belt(const std::size_t size);
+		virtual ~Belt() = 0;
 
-		Belt(Belt& cpy);
-		Belt(Belt&& cpym);
-		~Belt();
+		virtual data_t get() = 0;
+		virtual void set(const data_t data) = 0;
 
-		Belt& operator=(const Belt& cpy);
-		Belt& operator=(Belt&& cpym);
+		virtual void m_left() = 0;
+		virtual void m_right() = 0;
+
+		virtual void input(const data_t* data, const std::size_t size) = 0;
+		virtual void dump() = 0;
+
+	protected:
+
+	private:
+};
+
+class ArrayBelt : public Belt
+{
+	public:
+		ArrayBelt(const std::size_t size);
+
+		ArrayBelt(ArrayBelt& cpy);
+		ArrayBelt(ArrayBelt&& cpym);
+		~ArrayBelt();
+
+		ArrayBelt& operator=(const ArrayBelt& cpy);
+		ArrayBelt& operator=(ArrayBelt&& cpym);
 
 		data_t get();
 		void set(const data_t data);

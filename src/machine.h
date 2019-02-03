@@ -27,9 +27,9 @@ class TMachine
 		};
 		typedef Machine_Action** action_set_t;
 
-		TMachine(const std::size_t belt_size, const action_set_t actions);
+		TMachine(const action_set_t actions, Belt* belt);
 
-		Belt& get_belt();
+		Belt* get_belt();
 		state_t get_state();
 
 		void step();
@@ -40,7 +40,7 @@ class TMachine
 
 	private:
 		state_t state;
-		Belt belt;
+		Belt* belt;
 		const action_set_t actions;
 };
 
