@@ -26,9 +26,12 @@ int main() {
 		0x02, 0x02, 0x02, 0x02,
 	};
 
-	ArrayBelt belt(1 << 8);
+	//ArrayBelt belt(1 << 8);
+	LinkedBelt belt;
 	TMachine machine(actions, &belt);
 	machine.get_belt()->input(data, sizeof(data));
+
+	machine.get_belt()->dump();
 
 	while (machine.get_state() != 0xff)
 	{

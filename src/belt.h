@@ -36,8 +36,8 @@ class ArrayBelt : public Belt
 		ArrayBelt(ArrayBelt&& cpym);
 		~ArrayBelt();
 
-		ArrayBelt& operator=(const ArrayBelt& cpy);
-		ArrayBelt& operator=(ArrayBelt&& cpym);
+		ArrayBelt& operator =(const ArrayBelt& cpy);
+		ArrayBelt& operator =(ArrayBelt&& cpym);
 
 		data_t get();
 		void set(const data_t data);
@@ -54,6 +54,44 @@ class ArrayBelt : public Belt
 		data_t* position;
 		data_t* raw_data;
 		std::size_t data_size;
+};
+
+class LinkedBelt : public Belt
+{
+	public:
+
+		struct Node
+		{
+			Node(data_t value);
+
+			Node* previous;
+			Node* next;
+
+			data_t value;
+		};
+
+		LinkedBelt();
+
+		LinkedBelt(LinkedBelt& cpy);
+		LinkedBelt(LinkedBelt&& cpym);
+		~LinkedBelt();
+
+		LinkedBelt& operator =(const LinkedBelt& cpy);
+		LinkedBelt& operator =(LinkedBelt&& cpy);
+
+		data_t get();
+		void set(const data_t data);
+
+		void m_left();
+		void m_right();
+
+		void input(const data_t* data, const std::size_t size);
+		void dump();
+
+	protected:
+
+	private:
+		Node* root_element;
 };
 
 #endif // BELT_H

@@ -31,7 +31,7 @@ ArrayBelt::~ArrayBelt()
 	delete [] raw_data;
 }
 
-ArrayBelt& ArrayBelt::operator=(const ArrayBelt& cpy)
+ArrayBelt& ArrayBelt::operator =(const ArrayBelt& cpy)
 {
 	data_size = cpy.data_size;
 	raw_data = new unsigned char[cpy.data_size];
@@ -45,7 +45,7 @@ ArrayBelt& ArrayBelt::operator=(const ArrayBelt& cpy)
 	return *this;
 }
 
-ArrayBelt& ArrayBelt::operator=(ArrayBelt&& cpym)
+ArrayBelt& ArrayBelt::operator =(ArrayBelt&& cpym)
 {
 	position = cpym.position;
 	cpym.position = nullptr;
@@ -134,5 +134,119 @@ void ArrayBelt::dump()
 	if ((data_size - 1) % 16 != 15)
 	{
 		std::cout << std::endl;
+	}
+}
+
+LinkedBelt::Node::Node(Belt::data_t value) : previous(nullptr), next(nullptr), value(value) { }
+
+LinkedBelt::LinkedBelt()
+{
+	root_element = new Node(0x00);
+}
+
+LinkedBelt::~LinkedBelt()
+{
+	while (root_element->previous != nullptr)
+	{
+		root_element = root_element->previous;
+	}
+
+	while (root_element->next != nullptr)
+	{
+		root_element = root_element->next;
+		delete root_element->previous;
+	}
+
+	delete root_element;
+}
+
+Belt::data_t LinkedBelt::get()
+{
+	return root_element->value;
+}
+
+void LinkedBelt::set(const Belt::data_t data)
+{
+	root_element->value = data;
+}
+
+void LinkedBelt::m_left()
+{
+	if (root_element->previous == nullptr)
+	{
+		root_element->previous = new LinkedBelt::Node(0x00);
+		root_element->previous->next = root_element;
+	}
+	root_element = root_element->previous;
+}
+
+void LinkedBelt::m_right()
+{
+	if (root_element->next == nullptr)
+	{
+		root_element->next = new Node(0x00);
+		root_element->next->previous = root_element;
+	}
+	root_element = root_element->next;
+}
+
+void LinkedBelt::input(const Belt::data_t* data, const std::size_t size)
+{
+	Node* pointer = root_element;
+
+	if (root_element->previous == nullptr && root_element->next == nullptr)
+	{
+		root_element->value = data[0];
+	}
+	else
+	{
+		while (pointer->next != nullptr)
+		{
+			pointer = pointer->next;
+		}
+
+		pointer->next = new Node(data[0]);
+		pointer->next->previous = pointer;
+		pointer = pointer->next;
+	}
+
+	for (std::size_t index = 1; index < size; index++)
+	{
+		pointer->next = new Node(data[index]);
+		pointer->next->previous = pointer;
+		pointer = pointer->next;
+	}
+}
+
+void LinkedBelt::dump()
+{
+	Node* pointer = root_element;
+	while (pointer->previous != nullptr)
+	{
+		pointer = pointer->previous;
+	}
+
+	for (short i = 0; pointer != nullptr; pointer = pointer->next)
+	{
+		if (i == 0)
+		{
+			std::cout << "0x" << std::setw(8) << std::setfill('0') << std::hex
+					<< 0x00 << "     ";
+		}
+
+		std::cout << std::setw(2) << std::setfill('0') << std::hex
+				<< (int) root_element->value << ' ';
+
+		if (i == 7)
+		{
+			std::cout << " ";
+		}
+		if (i == 15)
+		{
+			std::cout << std::endl;
+		}
+
+		i++;
+		i %= 16;
 	}
 }
